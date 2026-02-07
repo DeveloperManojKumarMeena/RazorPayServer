@@ -1,18 +1,25 @@
 const Razorpay = require('razorpay');
 const Payment = require('../module/payment.module');
+const productModel = require('../module/product.module');
 
 const razorpay = new Razorpay({
     key_id:"rzp_test_SCsxzWnzJfwBU9",
-    key_secret:process.env.RAZORPAY_KEY_SECRET
+    key_secret:"de7sXtrLH2VZd2FJ5Huu4dIR"
 })
 
 
 const createOrderController =async (req, res) => {
 
-  const orderfrontend = req.body
+  const {id} = req.body
+
+  const product = await productModel.find({
+    _id:id
+  })
+
+  console.log( "jai ho : "+ product[0].title)
 
   const options = {
-    amount: orderfrontend.price.amount, // amount in smallest currency unit
+    amount: product[0].price.amount, // amount in smallest currency unit
     currency: "INR",
   };
   try {
@@ -32,6 +39,7 @@ const createOrderController =async (req, res) => {
 
   } catch (error) {
     res.status(500).send('Error creating order');
+    console.log(error)
   }
 };
 

@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 const ProductCard = ({ product }) => {
   const [isAddingToCart, setIsAddingToCart] = useState(false)
   const [isAdded, setIsAdded] = useState(false)
 
-  const handleBuyNow = async () => {
+  const handleBuyNow = async (e) => {
+    const order = await axios.post('http://localhost:3000/createOrder',{id : e})
+    console.log(order.data)
+    
     setIsAddingToCart(true)
     
     // Simulate adding to cart / initiating purchase
@@ -66,7 +70,7 @@ const ProductCard = ({ product }) => {
 
         {/* Buy Now Button */}
         <button
-          onClick={handleBuyNow}
+          onClick={()=>handleBuyNow(product._id)}
           disabled={isAddingToCart}
           className={`mt-auto w-full py-2 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
             isAdded
